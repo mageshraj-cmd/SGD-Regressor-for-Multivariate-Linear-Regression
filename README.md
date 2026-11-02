@@ -59,7 +59,7 @@ print(f"R² for Occupancy: {r2_occupancy:.2f}")
 ```
 
 ## Output:
- [[ 1.10294192, 35.91524355],
+[[ 1.10294192, 35.91524355],
  [ 1.51829697, 35.80348534],
  [ 2.2781599 , 35.71878728],
  ...,
@@ -67,7 +67,6 @@ print(f"R² for Occupancy: {r2_occupancy:.2f}")
  [ 1.70545882, 35.76972047],
  [ 1.81947425, 35.71433187]]
 Squared Error: 2.6030095425883086
-
 
 ## Result:
 Thus the program to implement the multivariate linear regression model for predicting the price of the house and number of occupants in the house with SGD regressor is written and verified using python programming.
