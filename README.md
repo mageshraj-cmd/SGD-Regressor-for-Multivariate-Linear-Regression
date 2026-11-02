@@ -17,56 +17,68 @@ To write a program to predict the price of the house and number of occupants in 
 ```
 /*
 Program to implement the multivariate linear regression model for predicting the price of the house and number of occupants in the house with SGD regressor.
-Developed by: 
-RegisterNumber:  
-*/import numpy as np
-from sklearn.datasets import fetch_california_housing
+Developed by: MAGESHRAJ P
+RegisterNumber: 212224250010 
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import SGDRegressor
-from sklearn.multioutput import MultiOutputRegressor
-from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.linear_model import SGDClassifier
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
-data = fetch_california_housing()
+iris = load_iris()
 
-X = data.data[:, [0, 1, 2, 5, 7]]  # Features: MedInc, HouseAge, AveRooms, AveOccup, Population
-y = np.column_stack((data.target, data.data[:, 5]))  # Target: House Price, Occupancy
+df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+df['target'] = iris.target
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+print("First 5 rows of the dataset:")
+print(df.head())
+
+X = df.drop('target', axis=1)
+y = df['target']
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
 
 scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train)
-X_test_scaled = scaler.transform(X_test)
+X_train = scaler.fit_transform(X_train)
+X_test  = scaler.transform(X_test)
 
-sgd = SGDRegressor(max_iter=1000, tol=1e-3)
-multi_output_sgd = MultiOutputRegressor(sgd)
-multi_output_sgd.fit(X_train_scaled, y_train)
+sgd_clf = SGDClassifier(max_iter=1000, tol=1e-3, random_state=42)
+sgd_clf.fit(X_train, y_train)
 
-y_pred = multi_output_sgd.predict(X_test_scaled)
+y_pred = sgd_clf.predict(X_test)
 
-mse = mean_squared_error(y_test, y_pred)
-r2 = r2_score(y_test, y_pred)
+print(f"\nAccuracy: {accuracy_score(y_test, y_pred):.3f}")
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred, target_names=iris.target_names))
 
-print(f"Mean Squared Error: {mse:.2f}")
-print(f"R² Score: {r2:.2f}")
+cm = confusion_matrix(y_test, y_pred)
+print("Confusion Matrix:")
+print(cm)
 
-r2_house_price = r2_score(y_test[:, 0], y_pred[:, 0])
-r2_occupancy = r2_score(y_test[:, 1], y_pred[:, 1])
-
-print(f"R² for House Price: {r2_house_price:.2f}")
-print(f"R² for Occupancy: {r2_occupancy:.2f}")
-
+plt.figure(figsize=(6, 5))
+sns.heatmap(
+    cm,
+    annot=True,
+    fmt='d',
+    cmap='Oranges',
+    xticklabels=iris.target_names,
+    yticklabels=iris.target_names
+)
+plt.title("Confusion Matrix — Iris SGD Classifier")
+plt.xlabel("Predicted Label")
+plt.ylabel("True Label")
+plt.tight_layout()
+plt.show() */
 ```
 
 ## Output:
-[[ 1.10294192, 35.91524355],
- [ 1.51829697, 35.80348534],
- [ 2.2781599 , 35.71878728],
- ...,
- [ 4.31784449, 35.02074527],
- [ 1.70545882, 35.76972047],
- [ 1.81947425, 35.71433187]]
-Squared Error: 2.6030095425883086
+<img width="691" height="556" alt="image" src="https://github.com/user-attachments/assets/2dc2ec83-a1a7-4d04-8d3b-b5a9adc9512b" />
+<img width="640" height="517" alt="image" src="https://github.com/user-attachments/assets/d923dc6d-bf86-4f3f-bad9-83ab909d6c1e" />
 
 ## Result:
 Thus the program to implement the multivariate linear regression model for predicting the price of the house and number of occupants in the house with SGD regressor is written and verified using python programming.
